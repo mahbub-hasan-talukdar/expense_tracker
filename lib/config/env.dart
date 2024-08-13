@@ -51,5 +51,11 @@ abstract class Env {
     final Initialization initialization = Initialization(this);
     AppStorage appStorage = await initialization.initialize();
     return runApp(Application(appStorage: appStorage));
+    // runApp(
+    //   BlocProvider(
+    //     create: (context) => NoteBloc(),
+    //     child: Application(appStorage: appStorage),
+    //   ),
+    // );
   }
 }

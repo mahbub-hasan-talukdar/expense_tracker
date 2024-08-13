@@ -1,4 +1,4 @@
-import 'package:expense_tracker/presentation/item_details/item_details.dart';
+import 'package:expense_tracker/presentation/item_details/page/item_details.dart';
 import 'package:expense_tracker/presentation/items_list/items_list.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
