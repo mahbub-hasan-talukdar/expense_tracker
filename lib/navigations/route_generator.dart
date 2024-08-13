@@ -1,3 +1,4 @@
+import 'package:expense_tracker/presentation/items_list/item_list.dart';
 import 'package:go_router/go_router.dart';
 
 import '../presentation/item_details/page/expense_details.dart';
@@ -26,6 +27,11 @@ class RouteGenerator {
         path: "/${ExpenseDetailsPage.path}",
         builder: (context, state) => const ExpenseDetailsPage(),
       ),
+      GoRoute(
+        name: ItemList.path,
+        path: "/${ItemList.path}",
+        builder: (context, state) => const ItemList(),
+      )
     ],
   );
 }

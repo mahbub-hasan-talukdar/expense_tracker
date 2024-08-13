@@ -1,3 +1,5 @@
+import 'package:expense_tracker/presentation/item_details/item_details.dart';
+import 'package:expense_tracker/presentation/items_list/item_list.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -40,11 +42,7 @@ class _LandingPageState extends State<LandingPage> {
                     backgroundColor: WidgetStatePropertyAll(Colors.blue),
                   ),
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const ItemsList(),
-                      ),
-                    );
+                    context.go('/${ItemList.path}');
                   },
                   child: const Text(
                     'item lists',

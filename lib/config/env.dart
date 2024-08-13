@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:expense_tracker/presentation/items_list/bloc/item_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
@@ -50,6 +51,12 @@ abstract class Env {
   Future<void> initializeApp() async {
     final Initialization initialization = Initialization(this);
     AppStorage appStorage = await initialization.initialize();
-    return runApp(Application(appStorage: appStorage));
+    // return runApp(Application(appStorage: appStorage));
+    runApp(
+      BlocProvider(
+        create: (context) => ItemBloc(),
+        child: Application(appStorage: appStorage),
+      ),
+    );
   }
 }
