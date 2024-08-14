@@ -24,8 +24,6 @@ class _ItemDetailsState extends State<ItemDetails> {
   @override
   void initState() {
     super.initState();
-    title.clear();
-    price.clear();
     title.addListener(
       () => updateEnableButtonNotifier(),
     );
@@ -47,6 +45,8 @@ class _ItemDetailsState extends State<ItemDetails> {
   @override
   void dispose() {
     _scrollController.dispose();
+    title.dispose();
+    price.dispose();
     super.dispose();
   }
 
@@ -61,13 +61,15 @@ class _ItemDetailsState extends State<ItemDetails> {
         backgroundColor: theme.colorScheme.primary,
       ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _date(context),
-            _selectAllRow(theme),
-            Expanded(child: _expenseList(theme)),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _date(context),
+              Expanded(child: _expenseList(theme)),
+            ],
+          ),
         ),
       ),
     );
@@ -75,34 +77,10 @@ class _ItemDetailsState extends State<ItemDetails> {
 
   Widget _date(BuildContext context) {
     final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Text(
-        DateFormat('d MMM, yyyy').format(DateTime.now()),
-        style: theme.textTheme.headlineSmall?.copyWith(
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  Widget _selectAllRow(ThemeData theme) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Row(
-        children: [
-          Checkbox(
-            value: false,
-            onChanged: (value) {},
-          ),
-          const Text('Select All'),
-          const Spacer(),
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () {},
-          ),
-          const Text('Delete'),
-        ],
+    return Text(
+      DateFormat('d MMM, yyyy').format(DateTime.now()),
+      style: theme.textTheme.headlineSmall?.copyWith(
+        fontWeight: FontWeight.bold,
       ),
     );
   }
@@ -110,112 +88,110 @@ class _ItemDetailsState extends State<ItemDetails> {
   Widget _expenseList(ThemeData theme) {
     return ListView.builder(
       controller: _scrollController,
-      itemCount: 8,
+      itemCount: 12,
       itemBuilder: (context, index) {
-        if (index < 7) {
-          return GestureDetector(
-            onLongPress: () {
-              _isLongPressed
-                  ? null
-                  : setState(() {
-                      _showAddMoreButton = false;
-                      _showSaveButton = true;
-                      _showTextField = true;
-                      title.text = "Product ${index + 1}";
-                      price.text = "${(index + 1) * 10}";
-                    });
-              if (_isLongPressed == false) {
-                setState(() {
-                  _isLongPressed = true;
-                });
-                _scrollController.animateTo(
-                  _scrollController.position.maxScrollExtent + 200.0,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
-                );
-              }
-            },
-            child: card(context, theme, index),
-          );
+        if (index < 11) {
+          return expenseItem(context, index, theme);
         } else {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: _showAddMoreButton == true
-                    ? _addMoreButton(context)
-                    : Container(),
-              ),
-              if (_showTextField) _titleTextField(),
-              if (_showTextField) _priceTextField(),
-              if (_showSaveButton == true)
-                Padding(
-                  padding: const EdgeInsets.only(right: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      _saveButton(context),
-                    ],
-                  ),
-                )
-            ],
-          );
+          return bottomItem(context);
         }
       },
     );
   }
 
-  card(BuildContext context, ThemeData theme, int index) {
-    return Card(
-      elevation: 4,
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(16),
-        leading: Icon(Icons.shopping_cart, color: theme.colorScheme.primary),
-        title: Text(
-          "Product ${index + 1}",
-          style: theme.textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "\$${(index + 1) * 10}",
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.primary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete_outline_outlined),
-              onPressed: () {},
-            ),
-          ],
-        ),
-      ),
+  Widget expenseItem(BuildContext context, int index, ThemeData theme) {
+    return GestureDetector(
+      onLongPress: () {
+        _longPressEvent(index);
+      },
+      child: card(context, theme, index),
     );
   }
 
-  _addMoreButton(BuildContext context) {
+  void _longPressEvent(int index) {
+    if (_isLongPressed) return;
+
+    setState(() {
+      _showAddMoreButton = false;
+      _showSaveButton = true;
+      _showTextField = true;
+      title.text = "Product ${index + 1}";
+      price.text = "${(index + 1) * 10}";
+      _isLongPressed = true;
+    });
+
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent + 200.0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  card(BuildContext context, ThemeData theme, int index) {
+    return Card(
+      elevation: 2.5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: _cardItem(index, theme),
+    );
+  }
+
+  _cardItem(int index, ThemeData theme) {
+    return ListTile(
+      contentPadding: const EdgeInsets.all(16),
+      leading: Icon(Icons.shopping_cart, color: theme.colorScheme.primary),
+      title: Text(
+        "Product ${index + 1}",
+        style: theme.textTheme.bodyLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      trailing: _trailingItem(index, theme),
+    );
+  }
+
+  _trailingItem(int index, ThemeData theme) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          "\$${(index + 1) * 10}",
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: theme.colorScheme.primary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.delete_outline_outlined),
+          onPressed: () {},
+        ),
+      ],
+    );
+  }
+
+  Widget bottomItem(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _showAddMoreButton == true ? _addButton(context) : Container(),
+        if (_showTextField) _titleTextField(),
+        if (_showTextField) _priceTextField(),
+        if (_showSaveButton == true)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _saveButton(context),
+            ],
+          ),
+      ],
+    );
+  }
+
+  _addButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        setState(() {
-          _showAddMoreButton = false;
-          _showSaveButton = true;
-          _showTextField = true;
-        });
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent + 200.0,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
+        _addButtonEvent();
       },
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
@@ -229,36 +205,57 @@ class _ItemDetailsState extends State<ItemDetails> {
     );
   }
 
-  _saveButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        isButtonEnable
-            ? setState(() {
-                _showTextField = false;
-                _showSaveButton = false;
-                _showAddMoreButton = true;
-                title.clear();
-                price.clear();
-              })
-            : null;
-      },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white,
-        backgroundColor: isButtonEnable
-            ? Theme.of(context).colorScheme.primary
-            : Theme.of(context).colorScheme.secondary,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 12),
-      ),
-      child: const Text('Save'),
+  void _addButtonEvent() {
+    setState(() {
+      _showAddMoreButton = false;
+      _showSaveButton = true;
+      _showTextField = true;
+    });
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent + 200.0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
     );
+  }
+
+  _saveButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: ElevatedButton(
+        onPressed: () {
+          _saveButtonEvent();
+        },
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: isButtonEnable
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.secondary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 12),
+        ),
+        child: const Text('Save'),
+      ),
+    );
+  }
+
+  void _saveButtonEvent() {
+    isButtonEnable
+        ? setState(() {
+            _showTextField = false;
+            _showSaveButton = false;
+            _showAddMoreButton = true;
+            _isLongPressed = false;
+            title.clear();
+            price.clear();
+          })
+        : null;
   }
 
   Widget _titleTextField() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(10.0),
       child: TextField(
         controller: title,
         decoration: InputDecoration(
@@ -273,7 +270,7 @@ class _ItemDetailsState extends State<ItemDetails> {
 
   Widget _priceTextField() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(10.0),
       child: TextField(
         controller: price,
         decoration: InputDecoration(
