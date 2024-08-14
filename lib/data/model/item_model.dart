@@ -6,7 +6,7 @@ class ItemModel extends ItemEntity {
     required super.name,
     required super.price,
   });
-  static ItemModel toEntity(Map<String, dynamic> data) {
+  factory ItemModel.fromJson(Map<String, dynamic> data) {
     return ItemModel(
       date: data['date'],
       name: data['name'],
