@@ -27,7 +27,7 @@ class _LandingPageState extends State<LandingPage> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const ItemDetails(),
+                        builder: (context) =>  ItemDetails(),
                       ),
                     );
                   },
