@@ -29,10 +29,10 @@ class DatabaseService {
   }
 
   Future<int> insertData(
-      String description,
-      int price,
-      Database database,
-      ) async {
+    String description,
+    int price,
+    Database database,
+  ) async {
     return await database.insert('items', {
       'name': description,
       'price': price,
