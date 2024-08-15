@@ -7,8 +7,8 @@ import 'package:expense_tracker/presentation/items_list/bloc/item_event.dart';
 import 'package:expense_tracker/presentation/items_list/bloc/item_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ItemBloc extends Bloc<InitialFetchEvent, InitialFetchState> {
-  ItemBloc() : super(InitialFetchState()) {
+class ItemBloc extends Bloc<ItemEvent, ItemState> {
+  ItemBloc() : super(InitialFetchInit()) {
     on<InitialFetchEvent>(_initialFetch);
   }
 
@@ -16,9 +16,9 @@ class ItemBloc extends Bloc<InitialFetchEvent, InitialFetchState> {
     (List<ItemEntity>?, String?) response =
         await sl<ItemListUseCase>().readItems();
     if (response.$1 != null) {
-      emit(state.copyWith(list: response.$1, errorMessage: null));
+      emit(InitialFetchSuccess(list: response.$1));
     } else {
-      emit(state.copyWith(list: null, errorMessage: response.$2));
+      emit(InitialFetchFailed(errorMessage: response.$2!));
     }
   }
 }

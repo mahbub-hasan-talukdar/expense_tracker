@@ -51,12 +51,6 @@ abstract class Env {
   Future<void> initializeApp() async {
     final Initialization initialization = Initialization(this);
     AppStorage appStorage = await initialization.initialize();
-    // return runApp(Application(appStorage: appStorage));
-    runApp(
-      BlocProvider(
-        create: (context) => ItemBloc(),
-        child: Application(appStorage: appStorage),
-      ),
-    );
+    return runApp(Application(appStorage: appStorage));
   }
 }

@@ -1,6 +1,6 @@
 import 'package:expense_tracker/domain/entity/item_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:utilities/utilities.dart';
 
 class SingleItem extends StatelessWidget {
   const SingleItem({
@@ -56,7 +56,7 @@ class SingleItem extends StatelessWidget {
   }
 
   Text _itemTittle(BuildContext context) {
-    String today = DateFormat('d MMM, yyyy').format(DateTime.now());
+    String today = DateTime.now().formattedDate();
     String currentDay = items[index].date;
     return Text(
       (currentDay == today) ? 'Today' : items[index].date,

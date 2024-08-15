@@ -6,21 +6,20 @@ class ItemState extends Equatable {
   List<Object?> get props => [];
 }
 
-class InitialFetchState extends ItemState {
-  final List<ItemEntity>? list;
-  final String? errorMessage;
-  InitialFetchState({this.list = const [], this.errorMessage});
+class InitialFetchInit extends ItemState {}
 
-  InitialFetchState copyWith({
-    List<ItemEntity>? list,
-    String? errorMessage,
-  }) {
-    return InitialFetchState(
-      list: list ?? this.list,
-      errorMessage: errorMessage ?? this.errorMessage,
-    );
-  }
+class InitialFetchFailed extends ItemState {
+  final String errorMessage;
+  InitialFetchFailed({required this.errorMessage});
+  @override
+  List<Object?> get props => [errorMessage];
+}
+
+class InitialFetchSuccess extends ItemState {
+  final List<ItemEntity>? list;
+
+  InitialFetchSuccess({required this.list});
 
   @override
-  List<Object?> get props => [list, errorMessage];
+  List<Object?> get props => [list];
 }
