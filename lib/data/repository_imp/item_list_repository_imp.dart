@@ -1,6 +1,6 @@
-import 'package:expense_tracker/data/item_list_data_source/item_list_data_source.dart';
-import 'package:expense_tracker/domain/entity/item_entity.dart';
-import 'package:expense_tracker/domain/repository/item_list_repository.dart';
+import '../item_list_data_source/item_list_data_source.dart';
+import '../../domain/entity/item_entity.dart';
+import '../../domain/repository/item_list_repository.dart';
 
 class ItemListRepositoryImp implements ItemListRepository {
   @override

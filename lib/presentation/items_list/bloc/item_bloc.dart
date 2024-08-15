@@ -1,11 +1,11 @@
 import 'dart:async';
-
-import 'package:expense_tracker/config/service_locator.dart';
-import 'package:expense_tracker/domain/entity/item_entity.dart';
-import 'package:expense_tracker/domain/use_case/item_list_use_case.dart';
-import 'package:expense_tracker/presentation/items_list/bloc/item_event.dart';
-import 'package:expense_tracker/presentation/items_list/bloc/item_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../config/service_locator.dart';
+import '../../../domain/entity/item_entity.dart';
+import '../../../domain/use_case/item_list_use_case.dart';
+import 'item_event.dart';
+import 'item_state.dart';
 
 class ItemBloc extends Bloc<ItemEvent, ItemState> {
   ItemBloc() : super(InitialFetchInit()) {

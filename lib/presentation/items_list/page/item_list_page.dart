@@ -1,10 +1,10 @@
-import 'package:expense_tracker/config/service_locator.dart';
-import 'package:expense_tracker/navigations/error_screen.dart';
-import 'package:expense_tracker/presentation/items_list/bloc/item_bloc.dart';
-import 'package:expense_tracker/presentation/items_list/bloc/item_event.dart';
-import 'package:expense_tracker/presentation/items_list/bloc/item_state.dart';
-import 'package:expense_tracker/presentation/items_list/page/error_page.dart';
-import 'package:expense_tracker/presentation/items_list/widgets/item_widgets/items.dart';
+import '../../../config/service_locator.dart';
+import '../bloc/item_bloc.dart';
+import '../bloc/item_event.dart';
+import '../bloc/item_state.dart';
+import 'error_page.dart';
+import '../widgets/item_widgets/items.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

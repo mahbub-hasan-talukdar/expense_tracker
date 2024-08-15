@@ -1,4 +1,4 @@
-import 'package:expense_tracker/domain/entity/item_entity.dart';
+import '../../domain/entity/item_entity.dart';
 
 class ItemModel extends ItemEntity {
   ItemModel({

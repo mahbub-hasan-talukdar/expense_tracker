@@ -1,7 +1,8 @@
-import 'package:expense_tracker/domain/entity/item_entity.dart';
-import 'package:expense_tracker/presentation/items_list/bloc/item_state.dart';
-import 'package:expense_tracker/presentation/items_list/widgets/item_bar_graph/item_bar.dart';
-import 'package:expense_tracker/presentation/items_list/widgets/item_bar_graph/item_bar_graph.dart';
+import '../../../../domain/entity/item_entity.dart';
+import '../../bloc/item_state.dart';
+import 'item_bar.dart';
+import 'item_bar_graph.dart';
+
 import 'package:flutter/material.dart';
 
 class GenerateBars {

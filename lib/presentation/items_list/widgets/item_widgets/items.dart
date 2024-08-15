@@ -1,6 +1,7 @@
-import 'package:expense_tracker/presentation/items_list/bloc/item_state.dart';
-import 'package:expense_tracker/presentation/items_list/widgets/item_bar_graph/generate_bars.dart';
-import 'package:expense_tracker/presentation/items_list/widgets/item_widgets/single_item.dart';
+import '../../bloc/item_state.dart';
+import '../item_bar_graph/generate_bars.dart';
+import 'single_item.dart';
+
 import 'package:flutter/material.dart';
 
 class MyItems extends StatefulWidget {

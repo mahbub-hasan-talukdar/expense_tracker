@@ -1,4 +1,4 @@
-import 'package:expense_tracker/presentation/items_list/widgets/item_bar_graph/item_bar.dart';
+import 'item_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -18,12 +18,15 @@ class ItemBarGraph extends StatelessWidget {
         borderData: FlBorderData(show: false),
         titlesData: FlTitlesData(
           show: true,
-          topTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          leftTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          leftTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
@@ -38,25 +41,29 @@ class ItemBarGraph extends StatelessWidget {
         ),
         maxY: 200,
         minY: 0,
-        barGroups: itemBars
-            .map(
-              (data) => BarChartGroupData(
-                x: data.x,
-                barRods: [
-                  BarChartRodData(
-                    toY: 200 * data.y / mx,
-                    color: Theme.of(context).colorScheme.primary,
-                    width: 30,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(5),
-                      topRight: Radius.circular(5),
-                    ),
-                  ),
-                ],
-              ),
-            )
-            .toList(),
+        barGroups: itemBars.map((data) => _barData(data, mx, context)).toList(),
       ),
+    );
+  }
+
+  BarChartGroupData _barData(
+    ItemBar data,
+    double mx,
+    BuildContext context,
+  ) {
+    return BarChartGroupData(
+      x: data.x,
+      barRods: [
+        BarChartRodData(
+          toY: 200 * data.y / mx,
+          color: Theme.of(context).colorScheme.primary,
+          width: 30,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(5),
+            topRight: Radius.circular(5),
+          ),
+        ),
+      ],
     );
   }
 }
