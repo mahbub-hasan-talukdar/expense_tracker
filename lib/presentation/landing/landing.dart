@@ -1,7 +1,8 @@
-import 'package:expense_tracker/presentation/item_details/page/item_details.dart';
-import 'package:expense_tracker/presentation/items_list/items_list.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../item_details/page/item_details.dart';
+import '../items_list/items_list.dart';
 
 class LandingPage extends StatefulWidget {
   static const String path = "landing";

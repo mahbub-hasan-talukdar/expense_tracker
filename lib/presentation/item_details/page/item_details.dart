@@ -115,7 +115,7 @@ class _ItemDetailsState extends State<ItemDetails> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "\$${(index + 1) * 10}",
+          "${(index + 1) * 10}",
           style: theme.textTheme.bodyLarge?.copyWith(
             color: theme.colorScheme.primary,
             fontWeight: FontWeight.bold,
