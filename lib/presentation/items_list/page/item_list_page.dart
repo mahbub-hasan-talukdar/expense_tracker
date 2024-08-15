@@ -41,7 +41,7 @@ class ItemListState extends State<ItemListPage>
           case InitialFetchFailed():
             return MyErrorPage(errorMessage: state.errorMessage);
           case InitialFetchSuccess():
-            return MyItems(state: state);
+            return MyItems(itemList: state.list);
           default:
             return const CircularProgressIndicator();
         }

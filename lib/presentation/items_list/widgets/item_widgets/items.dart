@@ -1,3 +1,4 @@
+import '../../../../domain/entity/item_entity.dart';
 import '../../bloc/item_state.dart';
 import '../item_bar_graph/generate_bars.dart';
 import 'single_item.dart';
@@ -5,8 +6,8 @@ import 'single_item.dart';
 import 'package:flutter/material.dart';
 
 class MyItems extends StatefulWidget {
-  final InitialFetchSuccess state;
-  const MyItems({super.key, required this.state});
+  final List<ItemEntity>? itemList;
+  const MyItems({super.key, required this.itemList});
 
   @override
   State<MyItems> createState() => _MyItemsState();
@@ -29,7 +30,6 @@ class _MyItemsState extends State<MyItems> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: myAppBar(context),
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -37,10 +37,8 @@ class _MyItemsState extends State<MyItems> with SingleTickerProviderStateMixin {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            GenerateBars().myBarChart(widget.state),
-            Expanded(
-              child: _buildItems(widget.state, screenWidth),
-            ),
+            GenerateBars().myBarChart(widget.itemList),
+            Expanded(child: _buildItems(widget.itemList)),
           ],
         ),
       ),
@@ -61,14 +59,14 @@ class _MyItemsState extends State<MyItems> with SingleTickerProviderStateMixin {
     );
   }
 
-  ListView _buildItems(InitialFetchSuccess state, double screenWidth) {
+  ListView _buildItems(List<ItemEntity>? itemList) {
     return ListView.builder(
-      itemCount: state.list!.length,
+      itemCount: itemList!.length,
       itemBuilder: (context, index) {
         return AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
-            return _animatedItem(screenWidth, context, state, index);
+            return _animatedItem(context, itemList[index]);
           },
         );
       },
@@ -76,10 +74,8 @@ class _MyItemsState extends State<MyItems> with SingleTickerProviderStateMixin {
   }
 
   Transform _animatedItem(
-    double screenWidth,
     BuildContext context,
-    InitialFetchSuccess state,
-    int index,
+    ItemEntity item,
   ) {
     return Transform.translate(
       offset: Offset(
@@ -89,10 +85,7 @@ class _MyItemsState extends State<MyItems> with SingleTickerProviderStateMixin {
       child: Opacity(
         opacity: _controller.value,
         child: SingleItem(
-          screenWidth: screenWidth,
-          context: context,
-          items: state.list!,
-          index: index,
+          item: item,
         ),
       ),
     );

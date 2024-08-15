@@ -6,12 +6,11 @@ import 'item_bar_graph.dart';
 import 'package:flutter/material.dart';
 
 class GenerateBars {
-  SizedBox myBarChart(InitialFetchSuccess state) {
+  SizedBox myBarChart(List<ItemEntity>? itemList) {
     return SizedBox(
       height: 200,
-      width: (state.list == null) ? 0 : state.list!.length * 60.0,
       child: ItemBarGraph(
-        itemBars: generateBars(state.list),
+        itemBars: generateBars(itemList),
       ),
     );
   }

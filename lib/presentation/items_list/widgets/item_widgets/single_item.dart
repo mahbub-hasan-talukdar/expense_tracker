@@ -5,16 +5,10 @@ import 'package:utilities/utilities.dart';
 class SingleItem extends StatelessWidget {
   const SingleItem({
     super.key,
-    required this.screenWidth,
-    required this.context,
-    required this.items,
-    required this.index,
+    required this.item,
   });
 
-  final double screenWidth;
-  final BuildContext context;
-  final List<ItemEntity> items;
-  final int index;
+  final ItemEntity? item;
 
   @override
   Widget build(BuildContext context) {
@@ -31,70 +25,54 @@ class SingleItem extends StatelessWidget {
   ListTile _myListTile(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.all(16),
-      leading: _itemLeadingIcon(context),
+      leading: _leadingIcon(context),
       title: _itemTittle(context),
-      subtitle: _itemSubtittle(context),
-      trailing: _itemTrailingIcon(context),
+      subtitle: Text(
+        'Total expense \$${item?.price}',
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        color: Theme.of(context).colorScheme.primary,
+      ),
       onTap: () {},
     );
   }
 
-  Icon _itemTrailingIcon(BuildContext context) {
-    return Icon(
-      Icons.arrow_forward_ios,
-      color: Theme.of(context).colorScheme.primary,
-    );
-  }
-
-  Text _itemSubtittle(BuildContext context) {
-    return Text(
-      'Total expense \$${items[index].price}',
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.primary,
+  Container _leadingIcon(BuildContext context) {
+    return Container(
+      height: 100,
+      width: 60,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Theme.of(context).colorScheme.primary.withOpacity(1),
+            Theme.of(context).colorScheme.primary.withOpacity(.7),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        shape: BoxShape.circle,
+      ),
+      child: Icon(
+        Icons.account_balance_wallet,
+        color: Theme.of(context).colorScheme.surface,
       ),
     );
   }
 
   Text _itemTittle(BuildContext context) {
-    String today = DateTime.now().formattedDate();
-    String currentDay = items[index].date;
+    final String today = DateTime.now().formattedDate();
+    String currentDay = item!.date;
     return Text(
-      (currentDay == today) ? 'Today' : items[index].date,
+      (currentDay == today) ? 'Today' : item!.date,
       style: TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 16,
         color: Theme.of(context).colorScheme.primary,
       ),
-    );
-  }
-
-  Container _itemLeadingIcon(BuildContext context) {
-    return Container(
-      height: screenWidth * .10,
-      width: screenWidth * .10,
-      decoration: _myDecoration(context),
-      child: _itemIcon(context),
-    );
-  }
-
-  Icon _itemIcon(BuildContext context) {
-    return Icon(
-      Icons.account_balance_wallet,
-      color: Theme.of(context).colorScheme.surface,
-    );
-  }
-
-  BoxDecoration _myDecoration(BuildContext context) {
-    return BoxDecoration(
-      gradient: LinearGradient(
-        colors: [
-          Theme.of(context).colorScheme.primary.withOpacity(1),
-          Theme.of(context).colorScheme.primary.withOpacity(.7),
-        ],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-      shape: BoxShape.circle,
     );
   }
 }
