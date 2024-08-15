@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -27,12 +28,15 @@ class DatabaseService {
     ''');
   }
 
-  Future<int> insertData(Database database) async {
+  Future<int> insertData(
+    String description,
+    int price,
+    Database database,
+  ) async {
     return await database.insert('items', {
-      'name': 'ydsffs',
-      'price': 200,
-      // 'date': DateFormat('d MMM, yyyy').format(DateTime.now()),
-      'date': '08 Aug, 2024'
+      'name': description,
+      'price': price,
+      'date': DateFormat('d MMM, yyyy').format(DateTime.now()),
     });
   }
 }

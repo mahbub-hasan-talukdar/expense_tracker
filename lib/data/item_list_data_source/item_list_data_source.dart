@@ -14,13 +14,6 @@ class ItemListDataSource {
       return (null, e.toString());
     }
 
-    try {
-      await DatabaseService().insertData(database);
-    } on Exception catch (e) {
-      print('error on insert data');
-      return (null, e.toString());
-    }
-
     late List<Map<String, dynamic>> results;
     try {
       results = await DatabaseService().readData(database);
