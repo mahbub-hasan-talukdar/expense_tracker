@@ -18,5 +18,7 @@ Future<void> setUpServiceLocators() async {
   sl.registerFactory<ItemBloc>(() => ItemBloc());
   sl.registerLazySingleton<AddNewExpenseUseCase>(
       () => AddNewExpenseUseCase(sl<AddNewExpenseRepository>()));
+  sl.registerLazySingleton<AddNewExpenseRepository>(
+      () => AddExpenseRepositoryImp());
   sl.registerFactory<AddNewExpenseBloc>(() => AddNewExpenseBloc());
 }
