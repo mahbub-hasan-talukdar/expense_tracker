@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:utilities/extensions/extensions.dart';
 
-class ItemDetails extends StatefulWidget {
-  const ItemDetails({super.key});
+class ExpenseDetailsPage extends StatefulWidget {
+  static const String path = "expense-details";
+  const ExpenseDetailsPage({super.key});
 
   @override
-  State<ItemDetails> createState() => _ItemDetailsState();
+  State<ExpenseDetailsPage> createState() => _ExpenseDetailsPageState();
 }
 
-class _ItemDetailsState extends State<ItemDetails> {
+class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
   final ScrollController _scrollController = ScrollController();
   TextEditingController title = TextEditingController();
   TextEditingController price = TextEditingController();

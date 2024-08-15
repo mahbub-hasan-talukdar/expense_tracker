@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../item_details/page/item_details.dart';
+import '../item_details/page/expense_details.dart';
 import '../items_list/items_list.dart';
 
 class LandingPage extends StatefulWidget {
   static const String path = "landing";
+
   const LandingPage({super.key});
 
   @override
@@ -26,11 +27,7 @@ class _LandingPageState extends State<LandingPage> {
                     backgroundColor: WidgetStatePropertyAll(Colors.blue),
                   ),
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>  ItemDetails(),
-                      ),
-                    );
+                    context.go("/${ExpenseDetailsPage.path}");
                   },
                   child: const Text(
                     'item_details',
