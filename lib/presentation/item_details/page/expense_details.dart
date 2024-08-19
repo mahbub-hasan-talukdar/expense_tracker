@@ -50,7 +50,9 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -207,7 +209,7 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
   void _scrollDown() {
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent + 220.0,
+        _scrollController.position.maxScrollExtent + 280.0,
         duration: const Duration(milliseconds: 1000),
         curve: Curves.easeInOut,
       );
@@ -248,6 +250,11 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
           dateTime: widget.dateTime,
         ));
         _bloc.add(FetchExpenseEvent(date: widget.dateTime));
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent+10,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOut,
+        );
         title.clear();
         price.clear();
       },
