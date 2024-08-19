@@ -1,6 +1,12 @@
+import 'package:expense_tracker/domain/use_case/item_list_use_case.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../config/service_locator.dart';
 import '../../../../domain/entity/item_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:utilities/utilities.dart';
+
+import '../../../item_details/page/expense_details.dart';
 
 class SingleItem extends StatelessWidget {
   const SingleItem({
@@ -33,11 +39,17 @@ class SingleItem extends StatelessWidget {
           color: Theme.of(context).colorScheme.primary,
         ),
       ),
-      trailing: Icon(
-        Icons.arrow_forward_ios,
+      trailing: IconButton(
+        icon: const Icon(Icons.delete_outline),
         color: Theme.of(context).colorScheme.primary,
+        onPressed: () {
+          // sl<ItemListUseCase>().deleteDayData(item!.date);
+          print('delete');
+        },
       ),
-      onTap: () {},
+      onTap: () {
+        context.push("/${ExpenseDetailsPage.path}/${item?.date}");
+      },
     );
   }
 
@@ -67,12 +79,34 @@ class SingleItem extends StatelessWidget {
     final String today = DateTime.now().formattedDate();
     String currentDay = item!.date;
     return Text(
-      (currentDay == today) ? 'Today' : item!.date,
+      (currentDay == today) ? 'Today' : formatDate(item!.date),
       style: TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 16,
         color: Theme.of(context).colorScheme.primary,
       ),
     );
+  }
+
+  String formatDate(String date) {
+    List<String> months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    String day = date.substring(8, 10);
+    String month = months[int.parse(date.substring(5, 7)) - 1];
+    String year = date.substring(0, 4);
+
+    return '$day $month, $year';
   }
 }

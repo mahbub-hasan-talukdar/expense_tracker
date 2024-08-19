@@ -1,12 +1,13 @@
 import 'package:sqflite/sqflite.dart';
 
 import '../model/item_model.dart';
+import '../model/item_summary_model.dart';
 import 'database_service.dart';
 
 class GenerateReportDataSource {
   Future<(List<ItemModel>?, String?)> readDailyItems() async {
-    String path = await getDatabasesPath();
-    //const String path = '/Users/bs00849/Desktop/Dev/db';
+    // String path = await getDatabasesPath();
+    const String path = '/Users/bs00849/Desktop/Dev/db';
     const String dbName = 'items.db';
     const String reportFormat = '%Y-%m-%d';
     Database database;
@@ -68,6 +69,30 @@ class GenerateReportDataSource {
       List<ItemModel> list = [];
       for (var data in results) {
         list.add(ItemModel.fromJson(data));
+      }
+      await database.close();
+      return (list, null);
+    } on Exception catch (e) {
+      print('Error on monthly data');
+      return (null, e.toString());
+    }
+  }
+
+  Future<(List<ItemSummaryModel>?, String?)> getItemSummaryReport() async {
+    // String path = await getDatabasesPath();
+    const String path = '/Users/bs00849/Desktop/Dev/db';
+    const String dbName = 'items.db';
+
+    Database database;
+    try {
+      database = await DatabaseService().openDataBase(path, dbName);
+
+      late List<Map<String, dynamic>>? results;
+
+      results = await DatabaseService().getItemSummaryReport(database);
+      List<ItemSummaryModel> list = [];
+      for (var data in results) {
+        list.add(ItemSummaryModel.fromJson(data));
       }
       await database.close();
       return (list, null);

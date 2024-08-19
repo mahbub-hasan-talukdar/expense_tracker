@@ -3,20 +3,16 @@ import 'package:expense_tracker/data/model/item_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ItemListDataSource {
+  // String path = await getDatabasesPath();
+  String path = '/Users/bs00849/Desktop/Dev/db';
+  String dbName = 'items.db';
+  late List<Map<String, dynamic>> results;
   Future<(List<ItemModel>?, String?)> readItems() async {
-    String path = await getDatabasesPath();
-    // String path = '/Users/bs00849/Desktop/Dev/db';
-    String dbName = 'items.db';
     Database database;
+
     try {
       database = await DatabaseService().openDataBase(path, dbName);
-    } on Exception catch (e) {
-      print('error on open database');
-      return (null, e.toString());
-    }
 
-    late List<Map<String, dynamic>> results;
-    try {
       results = await DatabaseService().readData(database, '%Y-%m-%d');
     } on Exception catch (e) {
       print('Error on read data');
@@ -29,5 +25,15 @@ class ItemListDataSource {
     }
     await database.close();
     return (list, null);
+  }
+
+  Future<void> deleteExpensesByDate(String date) async {
+    Database database;
+    try {
+      database = await DatabaseService().openDataBase(path, dbName);
+      DatabaseService().deleteExpensesByDate(database, date);
+    } on Exception catch (e) {
+      print(e.toString());
+    }
   }
 }

@@ -1,9 +1,8 @@
-// import '../../config/service_locator.dart';
-// import '../entity/item_entity.dart';
-// import '../repository/item_list_repository.dart';
+import '../../config/service_locator.dart';
+import '../repository/item_list_repo.dart';
 
-// class ItemListUseCase {
-//   Future<(List<ItemEntity>?, String?)> readItems() {
-//     return sl<ItemListRepository>().readItems();
-//   }
-// }
+class ItemListUseCase {
+  Future<void> deleteDayData(String date) async {
+    await sl<ItemListRepo>().deleteExpensesByDate(date);
+  }
+}

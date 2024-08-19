@@ -1,5 +1,9 @@
+import 'package:expense_tracker/domain/use_case/item_list_use_case.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../config/service_locator.dart';
 import '../../../../domain/entity/item_entity.dart';
+import '../../../item_details/page/expense_details.dart';
 import 'single_item.dart';
 
 import 'package:flutter/material.dart';
@@ -37,10 +41,11 @@ class _MyItemsState extends State<MyItems> with SingleTickerProviderStateMixin {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            // GenerateBars().myBarChart(widget.itemList),
-            // if (widget.itemList != null) BarList(items: widget.itemList!),
-            if (widget.itemList != null)
-              Expanded(child: _buildItems(widget.itemList!)),
+            (widget.itemList == null)
+                ? const SizedBox()
+                : Expanded(
+                    child: _buildItems(widget.itemList!),
+                  ),
           ],
         ),
       ),
