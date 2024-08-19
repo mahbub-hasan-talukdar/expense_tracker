@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../item_details/page/expense_details.dart';
+
 enum GraphType { daily, monthly, yearly }
 
 class Dashboard extends StatefulWidget {
@@ -39,13 +41,19 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
     graphBloc.add(const GraphEvent(graphType: GraphType.daily));
-    // addExpenseBloc.add(CalendarEvent(dateTime: DateTime.now()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: myAppBar(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          String dateString = DateTime.now().toIso8601String();
+          context.push("/${ExpenseDetailsPage.path}/$dateString");
+        },
+        child: const Icon(Icons.add),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 15, right: 15),

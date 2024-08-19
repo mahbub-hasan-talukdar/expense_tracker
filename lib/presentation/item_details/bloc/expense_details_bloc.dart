@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:core';
 import 'package:expense_tracker/config/service_locator.dart';
-import 'package:expense_tracker/domain/entity/expense_details_entity.dart';
 import 'package:expense_tracker/domain/use_case/add_new_expense_use_case.dart';
 import 'package:expense_tracker/domain/use_case/fetch_expense_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

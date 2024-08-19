@@ -5,6 +5,7 @@
 ///[MThemeData] can be Material ThemeData or any kind of custom theme data
 ///[MThemeMode] provides the specific theme modes.
 ///[MThemeMode] can be Material theme mode or any kinds of custom theme mode
+library;
 
 abstract class ThemeGeneratorBase<MThemeData, MThemeMode>{
   MThemeData generateTheme();

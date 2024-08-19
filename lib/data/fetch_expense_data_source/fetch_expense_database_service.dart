@@ -23,11 +23,13 @@ class FetchExpenseDatabaseService {
       Database database, DateTime date) async {
     String formattedDate = DateFormat('yyyy-MM-dd').format(date);
 
-    return await database.rawQuery('''
+    var res = await database.rawQuery('''
     SELECT * 
     FROM items
     WHERE date(date) = ?
     ORDER BY name
   ''', [formattedDate]);
+    print(res);
+    return res;
   }
 }

@@ -24,7 +24,7 @@ class DatabaseService {
   ) async {
     return await database.rawQuery('''
       SELECT 
-        strftime('$reportFormat', date) AS day,
+        strftime('%Y-%m-%d', date) AS day,
         SUM(price) AS total_price
       FROM 
         items
@@ -37,11 +37,12 @@ class DatabaseService {
     String description,
     int price,
     Database database,
+    DateTime date,
   ) async {
     return await database.insert('items', {
       'name': description,
       'price': price,
-      'date': DateTime.now().toIso8601String(),
+      'date': date.toIso8601String(),
     });
   }
 }

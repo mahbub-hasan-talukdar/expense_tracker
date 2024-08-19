@@ -5,7 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
 class FetchExpenseDataSource {
-  Future<Either<String, List<ExpenseDetailsModel>>> readItems(DateTime date) async {
+  Future<Either<String, List<ExpenseDetailsModel>>> readItems(
+      DateTime date) async {
     String path = await getDatabasesPath();
     String dbName = 'items.db';
     Database database;

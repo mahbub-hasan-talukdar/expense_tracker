@@ -3,9 +3,14 @@ import 'package:sqflite/sqflite.dart';
 import 'database_service.dart';
 
 class InsertExpense {
-  Future<String?> insertNewExpense(String description, int price) async {
-    String path = await getDatabasesPath();
-    String dbName = 'items.db';
+  Future<String?> insertNewExpense(
+    String description,
+    int price,
+    DateTime date,
+  ) async {
+    // String path = await getDatabasesPath();
+    const String path = '/Users/bs00849/Desktop/Dev/db';
+    const String dbName = 'items.db';
     Database database;
     try {
       database = await DatabaseService().openDataBase(path, dbName);
@@ -14,7 +19,12 @@ class InsertExpense {
       return e.toString();
     }
     try {
-      await DatabaseService().insertData(description, price, database);
+      await DatabaseService().insertData(
+        description,
+        price,
+        database,
+        date,
+      );
     } on Exception catch (e) {
       print('error on insert data');
       return e.toString();
