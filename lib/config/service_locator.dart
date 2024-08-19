@@ -1,3 +1,6 @@
+import 'package:expense_tracker/data/repository_imp/generate_report_repo_imp.dart';
+import 'package:expense_tracker/domain/repository/generate_report_repo.dart';
+import 'package:expense_tracker/domain/use_case/generate_report_use_case.dart';
 import 'package:get_it/get_it.dart';
 
 import '../data/repository_imp/add_expense_repository_imp.dart';
@@ -16,9 +19,14 @@ Future<void> setUpServiceLocators() async {
   sl.registerLazySingleton<ItemListUseCase>(() => ItemListUseCase());
 
   sl.registerFactory<ItemBloc>(() => ItemBloc());
+
   sl.registerLazySingleton<AddNewExpenseUseCase>(
       () => AddNewExpenseUseCase(sl<AddNewExpenseRepository>()));
   sl.registerLazySingleton<AddNewExpenseRepository>(
       () => AddExpenseRepositoryImp());
   sl.registerFactory<AddNewExpenseBloc>(() => AddNewExpenseBloc());
+
+  sl.registerLazySingleton<GenerateReportRepo>(() => GenerateReportRepoImp());
+  sl.registerLazySingleton<GenerateReportUseCase>(
+      () => GenerateReportUseCase(sl<GenerateReportRepo>()));
 }
