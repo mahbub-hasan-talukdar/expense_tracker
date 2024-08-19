@@ -70,10 +70,7 @@ class CustomTextField extends StatelessWidget {
         borderSide: BorderSide.none,
       ),
       floatingLabelBehavior: FloatingLabelBehavior.never,
-      contentPadding:
-      const EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+      contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 10),
     );
   }
-  
-  
 }

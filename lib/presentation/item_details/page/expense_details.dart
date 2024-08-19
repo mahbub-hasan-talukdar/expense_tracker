@@ -251,7 +251,7 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
         ));
         _bloc.add(FetchExpenseEvent(date: widget.dateTime));
         _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent+10,
+          _scrollController.position.maxScrollExtent + 10,
           duration: const Duration(milliseconds: 1000),
           curve: Curves.easeInOut,
         );

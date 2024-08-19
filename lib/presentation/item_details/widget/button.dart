@@ -18,41 +18,57 @@ class GradientButton extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8, left: 2, right: 10, bottom: 10),
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradientColors,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          gradient: _lineGradient(),
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
+            _boxShadow(),
           ],
         ),
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            shadowColor: Colors.transparent,
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
+          style: _buttonStyle(),
           onPressed: onPressed,
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
-            ),
-          ),
+          child: _child(),
         ),
+      ),
+    );
+  }
+
+  _lineGradient() {
+    return LinearGradient(
+      colors: gradientColors,
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+  }
+
+  _boxShadow() {
+    return BoxShadow(
+      color: Colors.black.withOpacity(0.2),
+      spreadRadius: 1,
+      blurRadius: 8,
+      offset: const Offset(0, 4),
+    );
+  }
+
+  _buttonStyle() {
+    return ElevatedButton.styleFrom(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      shadowColor: Colors.transparent,
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    );
+  }
+
+  _child() {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 0.5,
       ),
     );
   }
