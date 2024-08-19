@@ -93,6 +93,7 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
 
           return ListView.builder(
             controller: _scrollController,
+            physics: ClampingScrollPhysics(),
             itemCount: expenses.length + 1,
             itemBuilder: (context, index) {
               if (index < expenses.length) {
@@ -203,11 +204,13 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
   }
 
   void _scrollDown() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent + 200.0,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
+    if(_scrollController.hasClients){
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + 220.0,
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   Widget _addNewExpenseForm() {
@@ -245,6 +248,8 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
             dateTime: widget.dateTime,
           ));
           _bloc.add(FetchExpenseEvent(date: widget.dateTime));
+          title.clear();
+          price.clear();
         },
         style: _buttonStyle(),
         child: const Text('Save'),
@@ -257,9 +262,16 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
       foregroundColor: Colors.white,
       backgroundColor: Theme.of(context).colorScheme.primary,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      shadowColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+      elevation: 10,
+      textStyle: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
+
 }
