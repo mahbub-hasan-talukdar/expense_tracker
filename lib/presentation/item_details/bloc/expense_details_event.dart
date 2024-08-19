@@ -10,10 +10,12 @@ class ExpenseDetailsEvent extends Equatable {
 class AddNewExpense extends ExpenseDetailsEvent {
   final String description;
   final int price;
+  final DateTime dateTime;
 
   const AddNewExpense({
     required this.description,
     required this.price,
+    required this.dateTime,
   });
 
   @override

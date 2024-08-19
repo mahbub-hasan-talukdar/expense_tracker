@@ -4,8 +4,8 @@ import 'package:sqflite/sqflite.dart';
 
 class ItemListDataSource {
   Future<(List<ItemModel>?, String?)> readItems() async {
-    // String path = await getDatabasesPath();
-    String path = '/Users/bs00849/Desktop/Dev/db';
+    String path = await getDatabasesPath();
+    // String path = '/Users/bs00849/Desktop/Dev/db';
     String dbName = 'items.db';
     Database database;
     try {

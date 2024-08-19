@@ -15,11 +15,11 @@ class FetchExpenseDataSource {
       return Left(e.toString());
     }
 
-    String formattedDate = DateFormat('d MMM, yyyy').format(date);
+    //String formattedDate = DateFormat('d MMM, yyyy').format(date);
 
     late List<Map<String, dynamic>> results;
     try {
-      results = await FetchExpenseDatabaseService().readData(database, formattedDate);
+      results = await FetchExpenseDatabaseService().readData(database, date);
     } on Exception catch (e) {
       return Left(e.toString());
     }

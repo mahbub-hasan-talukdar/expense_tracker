@@ -242,6 +242,7 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
           _bloc.add(AddNewExpense(
             description: title.text,
             price: int.parse(price.text),
+            dateTime: widget.dateTime,
           ));
           _bloc.add(FetchExpenseEvent(date: widget.dateTime));
         },

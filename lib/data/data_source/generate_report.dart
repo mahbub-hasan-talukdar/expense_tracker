@@ -5,8 +5,8 @@ import 'database_service.dart';
 
 class GenerateReportDataSource {
   Future<(List<ItemModel>?, String?)> readDailyItems() async {
-    // String path = await getDatabasesPath();
-    const String path = '/Users/bs00849/Desktop/Dev/db';
+    String path = await getDatabasesPath();
+    //const String path = '/Users/bs00849/Desktop/Dev/db';
     const String dbName = 'items.db';
     const String reportFormat = '%Y-%m-%d';
     Database database;

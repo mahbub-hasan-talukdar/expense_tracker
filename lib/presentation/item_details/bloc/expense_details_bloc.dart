@@ -20,6 +20,7 @@ class ExpenseDetailsBloc
     await sl<AddNewExpenseUseCase>().addNewExpense(
       description: event.description,
       price: event.price,
+      dateTime: event.dateTime,
     );
   }
 
@@ -28,8 +29,8 @@ class ExpenseDetailsBloc
     final result = await sl<FetchExpenseUseCase>().readItems(event.date);
 
     result.fold(
-          (error) => emit(FetchExpenseError(errorMessage: error)),
-          (expenses) => emit(FetchExpenseSuccess(list: expenses)),
+      (error) => emit(FetchExpenseError(errorMessage: error)),
+      (expenses) => emit(FetchExpenseSuccess(list: expenses)),
     );
   }
 }
