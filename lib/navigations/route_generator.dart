@@ -1,5 +1,4 @@
 import 'package:expense_tracker/presentation/dashboard/page/dashboard.dart';
-import 'package:expense_tracker/presentation/dashboard/widgets/add_expense/add_expense_page.dart';
 import 'package:expense_tracker/presentation/items_list/page/item_list_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -33,7 +32,6 @@ class RouteGenerator {
           return ExpenseDetailsPage(dateTime: date);
         },
       ),
-
       GoRoute(
         name: ItemListPage.path,
         path: "/${ItemListPage.path}",
@@ -43,11 +41,6 @@ class RouteGenerator {
         name: Dashboard.path,
         path: "/${Dashboard.path}",
         builder: (context, state) => const Dashboard(),
-      ),
-      GoRoute(
-        name: AddExpensePage.path,
-        path: "/${AddExpensePage.path}",
-        builder: (context, state) => AddExpensePage(),
       ),
     ],
   );

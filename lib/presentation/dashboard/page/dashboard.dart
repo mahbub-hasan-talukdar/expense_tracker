@@ -1,16 +1,11 @@
-import 'package:expense_tracker/presentation/dashboard/bloc/add_expense_bloc/add_expense_bloc.dart';
-import 'package:expense_tracker/presentation/dashboard/bloc/add_expense_bloc/add_expense_event.dart';
 import 'package:expense_tracker/presentation/dashboard/bloc/graph_bloc/graph_bloc.dart';
 import 'package:expense_tracker/presentation/dashboard/bloc/graph_bloc/graph_event.dart';
 import 'package:expense_tracker/presentation/dashboard/bloc/graph_bloc/graph_state.dart';
-import 'package:expense_tracker/presentation/dashboard/widgets/add_expense/add_expense_page.dart';
 import 'package:expense_tracker/presentation/items_list/page/item_list_page.dart';
 import 'package:expense_tracker/presentation/dashboard/widgets/my_bar_chart/bar_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
-import '../bloc/add_expense_bloc/add_expense_state.dart';
 
 enum GraphType { daily, monthly, yearly }
 
@@ -26,7 +21,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final GraphBloc graphBloc = GraphBloc();
-  final AddExpenseBloc addExpenseBloc = AddExpenseBloc();
+
   DateTime selectedDate = DateTime.now();
 
   final List<GraphType> graphType = [
@@ -38,14 +33,13 @@ class _DashboardState extends State<Dashboard> {
   void dispose() {
     super.dispose();
     graphBloc.close();
-    addExpenseBloc.close();
   }
 
   @override
   void initState() {
     super.initState();
     graphBloc.add(const GraphEvent(graphType: GraphType.daily));
-    addExpenseBloc.add(CalendarEvent(dateTime: DateTime.now()));
+    // addExpenseBloc.add(CalendarEvent(dateTime: DateTime.now()));
   }
 
   @override
@@ -114,31 +108,6 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  context.push('/${AddExpensePage.path}');
-                },
-                child: Text('add expense'),
-              ),
-              // AddExpensePage(),
-              BlocBuilder<AddExpenseBloc, AddExpenseState>(
-                bloc: addExpenseBloc,
-                builder: (context, state) {
-                  if (state is CalendarState) {
-                    return TextFormField(
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: 'Date',
-                        hintText: state.dateTime.toString().split(' ')[0],
-                        suffixIcon: const Icon(Icons.calendar_today),
-                      ),
-                      onTap: _pickDate,
-                    );
-                  } else {
-                    return Text('Something went wrong');
-                  }
-                },
-              ),
             ],
           ),
         ),
@@ -180,19 +149,6 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
     );
-  }
-
-  void _pickDate() async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-
-    if (pickedDate != null && pickedDate != selectedDate) {
-      addExpenseBloc.add(CalendarEvent(dateTime: pickedDate));
-    }
   }
 
   AppBar myAppBar(BuildContext context) {
