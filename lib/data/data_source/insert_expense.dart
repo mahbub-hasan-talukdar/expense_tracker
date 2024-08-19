@@ -8,8 +8,8 @@ class InsertExpense {
     int price,
     DateTime date,
   ) async {
-    // String path = await getDatabasesPath();
-    const String path = '/Users/bs00849/Desktop/Dev/db';
+    String path = await getDatabasesPath();
+    // const String path = '/Users/bs00849/Desktop/Dev/db';
     const String dbName = 'items.db';
     Database database;
     try {

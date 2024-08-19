@@ -5,12 +5,14 @@ class ExpenseDetailsModel extends ExpenseDetailsEntity {
     required super.name,
     required super.date,
     required super.price,
+    required super.id,
   });
   factory ExpenseDetailsModel.fromJson(Map<String, dynamic> data) {
     return ExpenseDetailsModel(
       name: data['name'],
       date: data['date'],
       price: data['price'],
+      id: data['id'],
     );
   }
 }

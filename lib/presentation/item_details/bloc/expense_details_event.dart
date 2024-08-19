@@ -22,6 +22,15 @@ class AddNewExpense extends ExpenseDetailsEvent {
   List<Object?> get props => [description, price];
 }
 
+class DeleteExpense extends ExpenseDetailsEvent {
+  final int id;
+
+  const DeleteExpense({required this.id});
+
+  @override
+  List<Object?> get props => [id];
+}
+
 class FetchExpenseEvent extends ExpenseDetailsEvent {
   final DateTime date;
 

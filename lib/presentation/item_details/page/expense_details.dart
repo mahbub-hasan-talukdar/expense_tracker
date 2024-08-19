@@ -48,10 +48,7 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Expense Details"),
-        centerTitle: true,
-      ),
+      appBar: AppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -151,11 +148,11 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
           fontWeight: FontWeight.bold,
         ),
       ),
-      trailing: _trailingItem(expense.price, theme),
+      trailing: _trailingItem(expense.price, expense.id, theme),
     );
   }
 
-  _trailingItem(int price, ThemeData theme) {
+  _trailingItem(int price, int id, ThemeData theme) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -168,7 +165,10 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
         ),
         IconButton(
           icon: const Icon(Icons.delete_outline_outlined),
-          onPressed: () {},
+          onPressed: () {
+            _bloc.add(DeleteExpense(id: id));
+            _bloc.add(FetchExpenseEvent(date: widget.dateTime));
+          },
         ),
       ],
     );
