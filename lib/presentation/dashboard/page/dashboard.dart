@@ -3,6 +3,7 @@ import 'package:expense_tracker/presentation/dashboard/bloc/graph_bloc/graph_eve
 import 'package:expense_tracker/presentation/dashboard/bloc/graph_bloc/graph_state.dart';
 import 'package:expense_tracker/presentation/dashboard/bloc/item_summary_bloc/item_summary_bloc.dart';
 import 'package:expense_tracker/presentation/dashboard/bloc/item_summary_bloc/item_summary_event.dart';
+import 'package:expense_tracker/presentation/dashboard/widgets/summary_graph/summary_list.dart';
 import 'package:expense_tracker/presentation/items_list/page/item_list_page.dart';
 import 'package:expense_tracker/presentation/dashboard/widgets/my_bar_chart/bar_list.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final GraphBloc graphBloc = GraphBloc();
-  final ItemSummaryBloc pieBloc = ItemSummaryBloc();
+  final ItemSummaryBloc itemSummaryBloc = ItemSummaryBloc();
 
   DateTime selectedDate = DateTime.now();
 
@@ -39,26 +40,67 @@ class _DashboardState extends State<Dashboard> {
   void dispose() {
     super.dispose();
     graphBloc.close();
-    pieBloc.close();
+    itemSummaryBloc.close();
   }
 
   @override
   void initState() {
     super.initState();
     graphBloc.add(const GraphEvent(graphType: GraphType.daily));
-    pieBloc.add(ItemSummaryDrawEvent());
+    itemSummaryBloc.add(ItemSummaryDrawEvent());
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: myAppBar(context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          String dateString = DateTime.now().toIso8601String();
-          context.push("/${ExpenseDetailsPage.path}/$dateString");
-        },
-        child: const Icon(Icons.add),
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      floatingActionButton: Stack(
+        children: [
+          ElevatedButton(
+            onPressed: () {},
+            style: ButtonStyle(
+              shape: WidgetStatePropertyAll(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              ),
+              elevation: const WidgetStatePropertyAll(5),
+              minimumSize: WidgetStatePropertyAll(
+                Size(screenWidth, 75),
+              ),
+              backgroundColor: WidgetStatePropertyAll(
+                Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.calendar_month,
+                  color: Theme.of(context).colorScheme.surface,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  '10 jan, 2024',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.surface,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 10,
+            top: 10,
+            child: FloatingActionButton(
+              onPressed: () {},
+              child: const Icon(Icons.add),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Padding(
@@ -128,11 +170,17 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
               ),
+              const SizedBox(height: 10),
               BlocBuilder<ItemSummaryBloc, ItemSummaryState>(
-                bloc: pieBloc,
+                bloc: itemSummaryBloc,
                 builder: (context, state) {
                   if (state is ItemSummaryStateSuccess) {
-                    return Text('ok');
+                    return Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: SummaryList(items: state.itemSummary!),
+                      ),
+                    );
                   } else if (state is ItemSummaryStateFailed) {
                     print(state.errorMessage);
                     return Text('failed');
@@ -153,6 +201,7 @@ class _DashboardState extends State<Dashboard> {
     BuildContext context,
   ) {
     final screenWidth = MediaQuery.of(context).size.width;
+
     return SizedBox(
       height: screenWidth * .05,
       width: screenWidth * .25,
