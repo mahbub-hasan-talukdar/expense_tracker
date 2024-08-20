@@ -59,37 +59,53 @@ class _DashboardState extends State<Dashboard> {
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButton: Stack(
         children: [
-          ElevatedButton(
-            onPressed: () {},
-            style: ButtonStyle(
-              shape: WidgetStatePropertyAll(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              ),
-              elevation: const WidgetStatePropertyAll(5),
-              minimumSize: WidgetStatePropertyAll(
-                Size(screenWidth, 75),
-              ),
-              backgroundColor: WidgetStatePropertyAll(
-                Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.calendar_month,
-                  color: Theme.of(context).colorScheme.surface,
-                ),
-                SizedBox(width: 10),
-                Text(
-                  '10 jan, 2024',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.surface,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+          SizedBox(
+            width: screenWidth - 30,
+            child: ElevatedButton(
+              onPressed: () async {
+                DateTime? selectedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                );
+
+                if (selectedDate != null) {
+                  print("Selected Date: $selectedDate");
+                }
+              },
+              style: ButtonStyle(
+                shape: WidgetStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-              ],
+                elevation: const WidgetStatePropertyAll(5),
+                minimumSize: WidgetStatePropertyAll(
+                  Size(screenWidth, 75),
+                ),
+                backgroundColor: WidgetStatePropertyAll(
+                  Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.calendar_month,
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    '10 jan, 2024',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.surface,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Positioned(
@@ -171,23 +187,27 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
               const SizedBox(height: 10),
-              BlocBuilder<ItemSummaryBloc, ItemSummaryState>(
-                bloc: itemSummaryBloc,
-                builder: (context, state) {
-                  if (state is ItemSummaryStateSuccess) {
-                    return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: SummaryList(items: state.itemSummary!),
-                      ),
-                    );
-                  } else if (state is ItemSummaryStateFailed) {
-                    print(state.errorMessage);
-                    return Text('failed');
-                  }
-                  return const CircularProgressIndicator();
-                },
-              )
+
+              // BlocBuilder<ItemSummaryBloc, ItemSummaryState>(
+              //   bloc: itemSummaryBloc,
+              //   builder: (context, state) {
+              //     if (state is ItemSummaryStateSuccess) {
+              //       return SizedBox(
+              //         height: screenWidth / 1.5,
+              //         child: Card(
+              //           child: Padding(
+              //             padding: const EdgeInsets.all(10.0),
+              //             child: SummaryList(items: state.itemSummary!),
+              //           ),
+              //         ),
+              //       );
+              //     } else if (state is ItemSummaryStateFailed) {
+              //       print(state.errorMessage);
+              //       return Text('failed');
+              //     }
+              //     return const CircularProgressIndicator();
+              //   },
+              // )
             ],
           ),
         ),
