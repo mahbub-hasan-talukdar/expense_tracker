@@ -1,6 +1,8 @@
-import 'package:expense_tracker/presentation/items_list/item_list.dart';
+import 'package:expense_tracker/presentation/dashboard/page/dashboard.dart';
+import 'package:expense_tracker/presentation/items_list/page/item_list_page.dart';
 import 'package:go_router/go_router.dart';
 
+import '../presentation/items_list/page/item_list_page.dart';
 import '../presentation/item_details/page/expense_details.dart';
 import '../presentation/landing/landing.dart';
 import 'error_screen.dart';
@@ -24,14 +26,23 @@ class RouteGenerator {
       ),
       GoRoute(
         name: ExpenseDetailsPage.path,
-        path: "/${ExpenseDetailsPage.path}",
-        builder: (context, state) => const ExpenseDetailsPage(),
+        path: "/${ExpenseDetailsPage.path}/:date",
+        builder: (context, state) {
+          final dateString = state.pathParameters['date']!;
+          final date = DateTime.parse(dateString);
+          return ExpenseDetailsPage(dateTime: date);
+        },
       ),
       GoRoute(
-        name: ItemList.path,
-        path: "/${ItemList.path}",
-        builder: (context, state) => const ItemList(),
-      )
+        name: ItemListPage.path,
+        path: "/${ItemListPage.path}",
+        builder: (context, state) => const ItemListPage(),
+      ),
+      GoRoute(
+        name: Dashboard.path,
+        path: "/${Dashboard.path}",
+        builder: (context, state) => const Dashboard(),
+      ),
     ],
   );
 }

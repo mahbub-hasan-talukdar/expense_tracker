@@ -1,9 +1,8 @@
 class ItemEntity {
-  String date, name;
+  String date;
   int price;
   ItemEntity({
     required this.date,
-    required this.name,
     required this.price,
   });
 }

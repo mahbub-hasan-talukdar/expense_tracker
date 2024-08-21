@@ -1,12 +1,12 @@
+
 import '../../../../domain/entity/item_entity.dart';
-import '../../bloc/item_state.dart';
-import '../item_bar_graph/generate_bars.dart';
 import 'single_item.dart';
 
 import 'package:flutter/material.dart';
 
 class MyItems extends StatefulWidget {
   final List<ItemEntity>? itemList;
+  static const path = 'MyItems';
   const MyItems({super.key, required this.itemList});
 
   @override
@@ -37,8 +37,10 @@ class _MyItemsState extends State<MyItems> with SingleTickerProviderStateMixin {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            GenerateBars().myBarChart(widget.itemList),
-            Expanded(child: _buildItems(widget.itemList)),
+            // GenerateBars().myBarChart(widget.itemList),
+            // if (widget.itemList != null) BarList(items: widget.itemList!),
+            if (widget.itemList != null)
+              Expanded(child: _buildItems(widget.itemList!)),
           ],
         ),
       ),
@@ -59,9 +61,9 @@ class _MyItemsState extends State<MyItems> with SingleTickerProviderStateMixin {
     );
   }
 
-  ListView _buildItems(List<ItemEntity>? itemList) {
+  ListView _buildItems(List<ItemEntity> itemList) {
     return ListView.builder(
-      itemCount: itemList!.length,
+      itemCount: itemList.length,
       itemBuilder: (context, index) {
         return AnimatedBuilder(
           animation: _controller,
