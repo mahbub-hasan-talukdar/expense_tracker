@@ -1,11 +1,21 @@
+import 'package:expense_tracker/config/service_locator.dart';
+import 'package:expense_tracker/domain/entity/expense_details_entity.dart';
+import 'package:expense_tracker/presentation/item_details/bloc/expense_details_bloc.dart';
+import 'package:expense_tracker/presentation/item_details/bloc/expense_details_event.dart';
+import 'package:expense_tracker/presentation/item_details/bloc/expense_details_state.dart';
 import 'package:expense_tracker/presentation/item_details/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:utilities/extensions/extensions.dart';
 
 class ExpenseDetailsPage extends StatefulWidget {
   static const String path = "expense-details";
-  const ExpenseDetailsPage({super.key});
+
+  const ExpenseDetailsPage({super.key, required this.dateTime});
+
+  final DateTime dateTime;
 
   @override
   State<ExpenseDetailsPage> createState() => _ExpenseDetailsPageState();
@@ -17,6 +27,13 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
   TextEditingController price = TextEditingController();
   final BehaviorSubject<bool> _isAddButtonVisible =
       BehaviorSubject<bool>.seeded(true);
+  final ExpenseDetailsBloc _bloc = sl<ExpenseDetailsBloc>();
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc.add(FetchExpenseEvent(date: widget.dateTime));
+  }
 
   @override
   void dispose() {
@@ -24,6 +41,7 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
     title.dispose();
     price.dispose();
     _isAddButtonVisible.close();
+    _bloc.close();
     super.dispose();
   }
 
@@ -52,7 +70,7 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
   Widget _date(BuildContext context) {
     final theme = Theme.of(context);
     return Text(
-      DateTime.now().formattedDate(),
+      widget.dateTime.formattedDate(),
       style: theme.textTheme.headlineSmall?.copyWith(
         fontWeight: FontWeight.bold,
       ),
@@ -60,63 +78,82 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
   }
 
   Widget _expenseList(BuildContext context) {
-    return ListView.builder(
-      controller: _scrollController,
-      itemCount: 12,
-      itemBuilder: (context, index) {
-        if (index < 11) {
-          return expenseItem(context, index, Theme.of(context));
+    return BlocBuilder<ExpenseDetailsBloc, ExpenseDetailsState>(
+      bloc: _bloc,
+      builder: (context, state) {
+        if (state is FetchExpenseSuccess) {
+          final expenses = state.list;
+          if (expenses == null || expenses.isEmpty) {
+            return const Center(child: Text('No expenses found.'));
+          }
+
+          return ListView.builder(
+            controller: _scrollController,
+            itemCount: expenses.length + 1,
+            itemBuilder: (context, index) {
+              if (index < expenses.length) {
+                final expense = expenses[index];
+                return expenseItem(context, expense, Theme.of(context));
+              } else {
+                return bottomItem(context);
+              }
+            },
+          );
+        } else if (state is FetchExpenseError) {
+          return Center(child: Text('Error: ${state.errorMessage}'));
         } else {
-          return bottomItem(context);
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );
   }
 
-  Widget expenseItem(BuildContext context, int index, ThemeData theme) {
+  Widget expenseItem(
+      BuildContext context, ExpenseDetailsEntity expense, ThemeData theme) {
     return GestureDetector(
       onLongPress: () {
-        _longPressEvent(context, index);
+        _longPressEvent(context, expense);
       },
-      child: card(context, theme, index),
+      child: card(context, theme, expense),
     );
   }
 
-  void _longPressEvent(BuildContext context, int index) {
+  void _longPressEvent(BuildContext context, ExpenseDetailsEntity expense) {
     _isAddButtonVisible.add(false);
     _scrollDown();
   }
 
-  Widget card(BuildContext context, ThemeData theme, int index) {
+  Widget card(
+      BuildContext context, ThemeData theme, ExpenseDetailsEntity expense) {
     return Card(
       elevation: 2.5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      child: _cardItem(index, theme),
+      child: _cardItem(expense, theme),
     );
   }
 
-  _cardItem(int index, ThemeData theme) {
+  _cardItem(ExpenseDetailsEntity expense, ThemeData theme) {
     return ListTile(
       contentPadding: const EdgeInsets.all(16),
       leading: Icon(Icons.shopping_cart, color: theme.colorScheme.primary),
       title: Text(
-        "Product ${index + 1}",
+        expense.name,
         style: theme.textTheme.bodyLarge?.copyWith(
           fontWeight: FontWeight.bold,
         ),
       ),
-      trailing: _trailingItem(index, theme),
+      trailing: _trailingItem(expense.price, theme),
     );
   }
 
-  _trailingItem(int index, ThemeData theme) {
+  _trailingItem(int price, ThemeData theme) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "${(index + 1) * 10}",
+          price.toString(),
           style: theme.textTheme.bodyLarge?.copyWith(
             color: theme.colorScheme.primary,
             fontWeight: FontWeight.bold,
@@ -169,8 +206,16 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
   Widget _addNewExpenseForm() {
     return Column(
       children: [
-        CustomTextField(labelText: "Description", controller: title),
-        CustomTextField(labelText: "Price", controller: price),
+        CustomTextField(
+            labelText: "Description",
+            controller: title,
+            keyboardType: TextInputType.text),
+        CustomTextField(
+          labelText: "Price",
+          controller: price,
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -187,6 +232,11 @@ class _ExpenseDetailsPageState extends State<ExpenseDetailsPage> {
       child: ElevatedButton(
         onPressed: () {
           _isAddButtonVisible.add(true);
+          _bloc.add(AddNewExpense(
+            description: title.text,
+            price: int.parse(price.text),
+          ));
+          _bloc.add(FetchExpenseEvent(date: widget.dateTime));
         },
         style: _buttonStyle(),
         child: const Text('Save'),

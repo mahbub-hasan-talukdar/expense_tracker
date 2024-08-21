@@ -1,10 +1,11 @@
-import 'package:expense_tracker/data/item_list_data_source/database_service.dart';
+import 'package:expense_tracker/data/data_source/database_service.dart';
 import 'package:expense_tracker/data/model/item_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ItemListDataSource {
   Future<(List<ItemModel>?, String?)> readItems() async {
-    String path = await getDatabasesPath();
+    // String path = await getDatabasesPath();
+    String path = '/Users/bs00849/Desktop/Dev/db';
     String dbName = 'items.db';
     Database database;
     try {
@@ -14,16 +15,9 @@ class ItemListDataSource {
       return (null, e.toString());
     }
 
-    try {
-      await DatabaseService().insertData(database);
-    } on Exception catch (e) {
-      print('error on insert data');
-      return (null, e.toString());
-    }
-
     late List<Map<String, dynamic>> results;
     try {
-      results = await DatabaseService().readData(database);
+      results = await DatabaseService().readData(database, '%Y-%m-%d');
     } on Exception catch (e) {
       print('Error on read data');
       return (null, e.toString());
